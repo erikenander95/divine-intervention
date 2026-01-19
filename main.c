@@ -3,15 +3,20 @@
 #include <math.h>
 #include <stdlib.h>
 
-
 #define SCREEN_WIDTH 1920
 #define SCREEN_HEIGHT 1080
 #define TILE_SIZE 10
 
 typedef enum{
     TILE_WATER = 0,
-    TILE_LAND = 1
+    TILE_LAND,
 } TileType;
+
+typedef struct {
+    TileType type;
+} Tile;
+
+
 
 int main(){
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Divine Intervention");
@@ -21,7 +26,7 @@ int main(){
 
     while(!WindowShouldClose())
     {
-        ClearBackground(BLUE);
+        ClearBackground(BLACK);
         BeginDrawing();
 
         DrawFPS(16, 16);
