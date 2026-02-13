@@ -3,9 +3,13 @@
 #include <math.h>
 #include <stdlib.h>
 
+#define STB_PERLIN_IMPLEMENTATION
+#include "stb_perlin.h"
+
 #define SCREEN_WIDTH 1920
 #define SCREEN_HEIGHT 1080
 #define TILE_SIZE 10
+
 
 typedef enum{
     TILE_WATER = 0,
@@ -24,19 +28,27 @@ int main(){
     
     Tile* world = malloc(worldWidth * worldHeight * sizeof(Tile));
 
+
     for (int y = 0; y < worldHeight; y++) {
         for (int x = 0; x < worldWidth; x++) {
+
+            float noiseValue = stb_perlin_noise3(x * 0.1f, y * 0.1f, 0.0f, 0, 0, 0);
+            
+
+            noiseValue = (noiseValue + 1.0f) / 2.0f;
+            
+            
             Tile* t = &world[x + y * worldWidth];
-            if (rand() % 5 == 0)
-                t->type = TILE_WATER;
-            else
+            if (noiseValue > 0.5f)
                 t->type = TILE_LAND;
+            else
+                t->type = TILE_WATER;
         }
     }
 
     while(!WindowShouldClose())
     {
-        
+
         Vector2 mousePos = GetMousePosition();
         
         BeginDrawing();
