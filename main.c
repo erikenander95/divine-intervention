@@ -15,6 +15,10 @@
 typedef enum{
     TILE_WATER = 0,
     TILE_LAND,
+    TILE_SAND,
+    TILE_ICE,
+    TILE_SNOW,
+    TILE_MOUNTAIN,
 } TileType;
 
 typedef struct {
@@ -52,17 +56,9 @@ int main(){
 
     while(!WindowShouldClose())
     {
-
-        Vector2 mousePos = GetMousePosition();
-
-        int tileX = mousePos.x / TILE_SIZE;
-        int tileY = mousePos.y / TILE_SIZE;
-
         
         BeginDrawing();
         ClearBackground(BLACK);
-
-        
 
         for (int y = 0; y < worldHeight; y++) {
             for (int x = 0; x < worldWidth; x++) {
@@ -72,12 +68,42 @@ int main(){
             }
         }
 
+        Vector2 mousePos = GetMousePosition();
+
+        int tileX = mousePos.x / TILE_SIZE;
+        int tileY = mousePos.y / TILE_SIZE;
+
+        Tile* t = &world[tileX + tileY * worldWidth];
+
+        const char* tileName;
+
+        switch (t->type){
+            case TILE_WATER:
+                tileName = "Water";
+                break;
+            case TILE_LAND:
+                tileName = "Land";
+                break;
+            case TILE_SAND:
+                tileName = "Sand";
+                break;
+            case TILE_ICE:
+                tileName = "Ice";
+                break;
+            case TILE_SNOW:
+                tileName = "Snow";
+                break;
+            case TILE_MOUNTAIN:
+                tileName = "Mountain";
+                break;
+        }
 
         DrawRectangle(tileX * TILE_SIZE, tileY * TILE_SIZE, 10, 10, (Color){0,0,0,50});
 
         DrawFPS(16, 16);
         
         DrawText(TextFormat("X: %.0f Y: %.0f", mousePos.x, mousePos.y), 600, 16, 20, WHITE);
+        DrawText(TextFormat("Type of land: %s", tileName), 800, 16, 20, WHITE);
         
         EndDrawing();
     }
