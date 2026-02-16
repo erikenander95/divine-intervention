@@ -2,6 +2,7 @@
 #include "raylib/raylib.h"
 #include <math.h>
 #include <stdlib.h>
+#include <time.h>
 
 #define STB_PERLIN_IMPLEMENTATION
 #include "stb_perlin.h"
@@ -28,18 +29,21 @@ int main(){
     
     Tile* world = malloc(worldWidth * worldHeight * sizeof(Tile));
 
+    srand(time(NULL));
+    float offsetx = rand();
+    float offsety = rand();
 
     for (int y = 0; y < worldHeight; y++) {
         for (int x = 0; x < worldWidth; x++) {
 
-            float noiseValue = stb_perlin_noise3(x * 0.1f, y * 0.1f, 0.0f, 0, 0, 0);
+            float noiseValue = stb_perlin_ridge_noise3(x * 0.01f + offsetx, y * 0.01f + offsety, 0.0f, 2.0f, 0.5f, 1.0f, 6);
             
 
-            noiseValue = (noiseValue + 1.0f) / 2.0f;
+            //noiseValue = (noiseValue + 1.0f) / 2.0f;
             
             
             Tile* t = &world[x + y * worldWidth];
-            if (noiseValue > 0.5f)
+            if (noiseValue > 0.6f)
                 t->type = TILE_LAND;
             else
                 t->type = TILE_WATER;
@@ -50,9 +54,15 @@ int main(){
     {
 
         Vector2 mousePos = GetMousePosition();
+
+        int tileX = mousePos.x / TILE_SIZE;
+        int tileY = mousePos.y / TILE_SIZE;
+
         
         BeginDrawing();
         ClearBackground(BLACK);
+
+        
 
         for (int y = 0; y < worldHeight; y++) {
             for (int x = 0; x < worldWidth; x++) {
@@ -61,6 +71,9 @@ int main(){
                 DrawRectangle(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE, color);
             }
         }
+
+
+        DrawRectangle(tileX * TILE_SIZE, tileY * TILE_SIZE, 10, 10, (Color){0,0,0,50});
 
         DrawFPS(16, 16);
         
