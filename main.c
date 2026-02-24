@@ -11,6 +11,8 @@
 #define SCREEN_HEIGHT 1080
 #define TILE_SIZE 10
 
+#define MAX_DEVOTION 5
+
 
 typedef enum{
     TILE_WATER = 0,
@@ -23,6 +25,8 @@ typedef enum{
 
 typedef struct {
     TileType type;
+    int devotion;
+    bool inControl;
 } Tile;
 
 int main(){
@@ -75,6 +79,18 @@ int main(){
 
         Tile* t = &world[tileX + tileY * worldWidth];
 
+        if(tileX >= 0 && tileX < worldWidth && tileY >= 0 && tileY < worldHeight){
+            Tile* t = &world[tileX + tileY * worldWidth];
+
+            if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && !t->inControl && t->type == TILE_LAND){
+                t->devotion++;
+
+                if(t->devotion >= MAX_DEVOTION){
+                    t->inControl = true;
+                }
+            }
+        }
+
         const char* tileName;
 
         switch (t->type){
@@ -98,12 +114,14 @@ int main(){
                 break;
         }
 
-        DrawRectangle(tileX * TILE_SIZE, tileY * TILE_SIZE, 10, 10, (Color){0,0,0,50});
+        DrawRectangle(tileX * TILE_SIZE, tileY * TILE_SIZE, TILE_SIZE, TILE_SIZE, (Color){0,0,0,50});
 
         DrawFPS(16, 16);
         
         DrawText(TextFormat("X: %.0f Y: %.0f", mousePos.x, mousePos.y), 600, 16, 20, WHITE);
         DrawText(TextFormat("Type of land: %s", tileName), 800, 16, 20, WHITE);
+        DrawText(TextFormat("Devotion: %d / %d", t->devotion, MAX_DEVOTION), 1200, 16, 20, WHITE);
+        DrawText(t->inControl ? "Status: Done" : "Status: In Progress", 1200, 40, 20, WHITE);
         
         EndDrawing();
     }
