@@ -1,0 +1,63 @@
+1. Map Generation
+
+Generate a 2D grid-based map.
+
+Map must be randomly generated at game start.
+
+Tiles can be either:
+
+Land
+
+Water
+
+2. Tile System
+
+Each tile stores:
+
+Tile type (Land or Water)
+
+Devotion value (integer)
+
+Completion state (Done / Not Done)
+
+Tiles must be selectable with mouse click.
+
+Currently selected tile must be visually highlighted.
+
+3. Tile Interaction
+
+When a tile is selected:
+
+Display tile information on screen:
+
+Type
+
+Current devotion
+
+Completion status
+
+Player can increase devotion on selected tile.
+
+When devotion reaches defined max value:
+
+Tile state changes to “Done”
+
+Tile visually updates to reflect completion.
+
+4. Save System
+
+Save:
+
+Entire map state
+
+Devotion values
+
+Completion states
+
+Load saved map on game start if save exists.
+
+Provide function to:
+
+Clear save data
+
+Restart with new random map
